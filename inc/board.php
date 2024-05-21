@@ -29,6 +29,42 @@ class Board {
         $stmt->execute();
     }
 
+    //게시판정보 수정
+    public function update($arr){
+        $sql = "UPDATE board_manage SET name=:name, btype=:btype WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':name', $arr['name']);
+        $stmt->bindValue(':btype', $arr['btype']);
+        $stmt->bindValue(':idx', $arr['idx']);
+        $stmt->execute();
+    }
+
+    //게시판 idx로 게시판 정보 가져오기
+    public function getBcode($idx) {
+        $sql = "SELECT bcode FROM board_manage WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idx', $idx);
+        $stmt->setFetchMode(PDO::FETCH_COLUMN, 0);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    //게시판 삭제
+    public function delete($idx) {
+        //bcode
+        $bcode = $this->getBcode($idx);
+        
+        $sql = "DELETE FROM board_manage where idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idx', $idx);
+        $stmt->execute();
+
+        $sql = "DELETE FROM board where bcode=:bcode";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':bcode', $bcode);
+        $stmt->execute();
+    }
+
     //게시판 코드 생성
     public function bcode_create() {
         $letter = range('a', 'z');
@@ -38,6 +74,16 @@ class Board {
             $bcode .= $letter[$r];
         }
         return $bcode;
+    }
+
+    //게시판 정보 불러오기
+    public function getInfo($idx){
+        $sql = "SELECT * FROM board_manage WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':idx', $idx);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }
 ?>

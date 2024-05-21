@@ -50,7 +50,7 @@ $boardArr = $board->list();
             <th><?=$row['cnt']; ?></th>
             <th><?=$row['create_at']; ?></th>
             <td>
-                <button class="btn btn-primary btn-sm btn_mem_edit" data-idx="<?= $row['idx']; ?>">수정</button>
+                <button class="btn btn-primary btn-sm btn_mem_edit" data-bs-toggle="modal" data-bs-target="#board_create_modal" data-idx="<?=$row['idx'];?>">수정</button>
                 <button class="btn btn-danger btn-sm btn_mem_delete" data-idx="<?= $row['idx']; ?>">삭제</button>
             </td>
         </tr>
@@ -69,8 +69,9 @@ $boardArr = $board->list();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">게시판 생성</h1>
-
+        <h1 class="modal-title fs-5" id="modalTitle">게시판 생성</h1>
+        <input type="hidden" name="mode" id="board_mode" value="">
+        <input type="hidden" name="idx" id="board_idx" value="">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex gap-2">
