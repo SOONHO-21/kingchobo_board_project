@@ -1,5 +1,6 @@
 <?php
-//회원목록
+//게시판 관리 클래스
+
 class Board {
     private $conn;
 
@@ -7,37 +8,21 @@ class Board {
     public function __construct($db) {
         $this->conn = $db;
     }
-    public function list() {
-        $sql = "SELECT idx, name, bcode, btype, cnt, DATE_FORMAT(create_at, '%Y-%m-%d %H:%i') AS create_at
-        FROM board_manage
-        ORDER BY idx ASC";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    //글목록
+    //bcode, id, NAME, SUBJECT, content, hit, create_at
+    //now() -> 2023-05-2 11:11:11 현재 연월일시분초
+    public function input($arr) {
+        $sql = "INSERT INTO board(bcode, id, name, subject, content, ip, create_at) VALUES(
+            :bcode, :id, :name, :subject, :content, :ip, :NOW())";
+        $stmt =$this->conn->prepare($sql);
+        $stmt->bindValue(':bcode', $arr['bcode']);
+        $stmt->bindValue(':id', $arr['id']);
+        $stmt->bindValue(':name', $arr['name']);
+        $stmt->bindValue(':subject', $arr['subject']);
+        $stmt->bindValue(':content', $arr['content']);
+        $stmt->bindValue(':ip', $arr['ip']);
         $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    //게시판 생성
-    public function create($arr) {
-        $sql = "INSERT INTO  board_manage(name, bcode, btype, create_at) values
-            (:name, :bcode, :btype, NOW())";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':name', $arr['name']);
-        $stmt->bindParam(':bcode', $arr['bcode']);
-        $stmt->bindParam(':btype', $arr['btype']);
-        $stmt->execute();
-    }
-
-    //게시판 코드 생성
-    public function bcode_create() {
-        $letter = range('a', 'z');
-        $bcode = '';
-        for($i = 0; $i < 6; $i++) {
-            $r = rand(0, 25);
-            $bcode .= $letter[$r];
-        }
-        return $bcode;
     }
 }
 ?>

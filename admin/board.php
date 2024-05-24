@@ -8,7 +8,7 @@ $menu_code = 'board';
 include 'inc_common.php';
 include 'inc_header.php';
 include '../inc/dbconfig.php';
-include '../inc/board.php';    //게시판관리 Class
+include '../inc/boardmanage.php';    //게시판관리 Class
 include '../inc/lib.php';       //페이지네이션
 
 $sn = (isset($_GET['sn']) && $_GET['sn'] != '' && is_numeric($_GET['sn'])) ? $_GET['sn'] : '';
@@ -18,7 +18,7 @@ $sf = (isset($_GET['sf']) && $_GET['sf'] != '') ? $_GET['sf'] : '';
 
 $paramArr = ['sn' => $sn, 'sf' => $sf];
 
-$board = new Board($db);
+$board = new BoardManage($db);
 
 $boardArr = $board->list();
 ?>
@@ -50,8 +50,9 @@ $boardArr = $board->list();
             <th><?=$row['cnt']; ?></th>
             <th><?=$row['create_at']; ?></th>
             <td>
-                <button class="btn btn-primary btn-sm btn_mem_edit" data-idx="<?= $row['idx']; ?>">수정</button>
-                <button class="btn btn-danger btn-sm btn_mem_delete" data-idx="<?= $row['idx']; ?>">삭제</button>
+              <button class="btn btn-success btn-sm btn_mem_view" data-idx="<?=$row['bcode'];?>">보기</button>
+              <button class="btn btn-primary btn-sm btn_mem_edit" data-bs-toggle="modal" data-bs-target="#board_create_modal" data-idx="<?=$row['idx'];?>">수정</button>
+              <button class="btn btn-danger btn-sm btn_mem_delete" data-idx="<?= $row['idx']; ?>">삭제</button>
             </td>
         </tr>
     <?php
@@ -69,8 +70,9 @@ $boardArr = $board->list();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">게시판 생성</h1>
-
+        <h1 class="modal-title fs-5" id="modalTitle">게시판 생성</h1>
+        <input type="hidden" name="mode" id="board_mode" value="">
+        <input type="hidden" name="idx" id="board_idx" value="">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body d-flex gap-2">

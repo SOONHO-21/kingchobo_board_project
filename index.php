@@ -1,13 +1,16 @@
 <?php
-session_start();
-
-$ses_id = (isset($_SESSION['ses_id']) && $_SESSION['ses_id'] != '') ? $_SESSION['ses_id'] : '';
-$ses_level = (isset($_SESSION['ses_level']) && $_SESSION['ses_level'] != '') ? $_SESSION['ses_level'] : '';
-
 $g_title = '순시큐리티';
 $js_array = ['js/home.js'];
 
 $menu_code = 'home';
+
+include 'inc/common.php';
+include 'inc/dbconfig.php';
+
+//게시판 목록
+include 'inc/boardmanage.php';
+$boardm = new BoardManage($db);
+$boardArr = $boardm->list();
 
 include 'inc_header.php';
 ?>
