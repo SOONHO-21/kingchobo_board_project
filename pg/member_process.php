@@ -44,39 +44,39 @@ if($mode == 'id_chk'){
     } else {
         die(json_encode(['result' => 'success']));
     }
-    } else if ($mode == 'input') {
+} else if ($mode == 'input') {
 
-        //Profile 이미지 처리
-        $photo = '';
-        if(isset($_FILES['photo']) && $_FILES['photo']['name'] != ''){
-            $tmparr = explode('.', $_FILES['photo']['name']);
-            $ext = end($tmparr);
-            $photo = $id.'.'.$ext;
+    //Profile 이미지 처리
+    $photo = '';
+    if(isset($_FILES['photo']) && $_FILES['photo']['name'] != ''){
+        $tmparr = explode('.', $_FILES['photo']['name']);
+        $ext = end($tmparr);
+        $photo = $id.'.'.$ext;
 
-            copy($_FILES['photo']['tmp_name'], "../data/profile/".$photo);
-        }
+        copy($_FILES['photo']['tmp_name'], "../data/profile/".$photo);
+    }
 
-        $arr = [
-            'id' => $id,
-            'email' => $email,
-            'name' => $name,
-            'password' => $password,
-            'zipcode' => $zipcode,
-            'addr1' => $addr1,
-            'addr2' => $addr2,
-            'photo' => $photo
-        ];
+    $arr = [
+        'id' => $id,
+        'email' => $email,
+        'name' => $name,
+        'password' => $password,
+        'zipcode' => $zipcode,
+        'addr1' => $addr1,
+        'addr2' => $addr2,
+        'photo' => $photo
+    ];
 
-        $mem -> input($arr);
+    $mem -> input($arr);
 
-        echo "
-        <script>
-            self.location.href='../member_success.php'
-        </script>
-        ";
+    echo "
+    <script>
+        self.location.href='../member_success.php'
+    </script>
+    ";
 
 
-    } else if($mode == 'edit') {
+} else if($mode == 'edit') {
 
         //Profile 이미지 처리
 
@@ -98,7 +98,7 @@ if($mode == 'id_chk'){
             'photo' => $old_photo
         ];
 
-        $mem->input($arr);
+        $mem->edit($arr);
 
         echo "
         <script>

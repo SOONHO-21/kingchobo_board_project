@@ -21,10 +21,35 @@ if($bcode == '') {
 }
 
 $board = new Board($db);
-$member = new Member($db);
+$member = new Member($db); // 여기에서 $member 라는 인스턴스가 만들어짐.
+
+//<p>dddd</p> <img src=".....">
 
 if($mode == 'input') {
-    
+
+    preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $content, $matches);
+    $img_array = [];
+    foreach($matches[1] AS $key => $row){
+        if(substr($row, 0, 5) != 'data:') {
+            continue;
+        }
+
+        //data:image/png;base64,.......
+        list($type, $data) = explode(';', $row);
+        list(,$data) = explode(';', $data);
+        $data = base64_decode($data);
+        list(,$ext) = explode('/', $type);
+        $ext = ($ext == 'jpeg') ? 'jpg' : $ext;
+
+        $filename = date('YmdHis').'_'.$key.'.'.$ext;
+
+        file_put_contents(BOARD_DIR."/".$filename, $data);
+
+        $content = str_replace($row, BOARD_WEB_DIR."/".$filename, $content);
+        $img_array[] = BOARD_WEB_DIR."/".$filename;
+    }
+
+
     if($subject == '') {
         die(json_encode(["result" => "empty_subject"]));
     }
@@ -33,7 +58,7 @@ if($mode == 'input') {
         die(json_encode(["result" => "empty_content"]));
     }
 
-    $memArr = $memArr->getInfo($ses_id);
+    $memArr = $member->getInfo($ses_id);
     $name = $memArr['name'];
 
     $arr = [

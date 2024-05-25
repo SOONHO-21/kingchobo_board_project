@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     f_email.value = ''
                     f_email.focus()
                 } else if(data.result == 'empty_email') {
-                    f_email.focus()
                     alert('이메일이 비어 있습니다.')
+                    f_email.focus()
                 } else if(data.result == 'email_format_wrong') {
                     alert('이메일이 형식이 맞지 않습니다.')
                     f_email.value = ''
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         //이메일을 변경했다면
-        if(f.email_chk.value != f.email.value){
+        if(f.old_email.value != f.email.value){
             if(f.email_chk.value == 0){
                 alert('이메일 중복확인을 해주세요')
                 return false

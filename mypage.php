@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'inc/common.php';
 
 $ses_id = (isset($_SESSION['ses_id']) && $_SESSION['ses_id'] != '') ? $_SESSION['ses_id'] : '';
 
@@ -22,7 +22,8 @@ $memArr = $mem->getInfo($ses_id);
 
 $js_array = ['js/mypage.js'];
 
-$g_title = '회원가입';
+$g_title = 'My page';
+
 
 include 'inc_header.php';
 ?>
@@ -30,8 +31,8 @@ include 'inc_header.php';
 
 <main class="w-50 mx-auto border rounded-5 p-5">
     <h1 class="f_center">회원정보수정</h1>
-    <form name="input_form" method="post" enctype="multipart/form-data" action="pg/member_process.php">
-        <input type="hidden" name="mode" value="">
+    <form name="input_form" method="post" enctype="multipart/form-data" autocomplete="off" action="pg/member_process.php">
+        <input type="hidden" name="mode" value="edit">
         <input type="hidden" name="email_chk" value="0">
         <input type="hidden" name="old_email" value="<?=$memArr['email']?>">
         <input type="hidden" name="old_photo" value="<?=$memArr['photo']?>">
@@ -103,8 +104,13 @@ include 'inc_header.php';
 
     <div class="mt-3 d-flex gap-2">
         <button type="button" class="btn btn-primary w-50" id="btn_submit">수정확인</button>
-        <button type="button" class="btn btn-secondary w-50">수정취소</button>
+        <button type="button" class="btn btn-secondary w-50" id="btn_cancel">수정취소</button>
     </div>
+    <script>
+    document.getElementById('btn_cancel').addEventListener('click', function() {
+        window.location.href = './index.php';
+    });
+    </script>
     </form>
 </main>
 <?php
