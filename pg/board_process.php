@@ -58,6 +58,21 @@ if($mode == 'input') {
         die(json_encode(["result" => "empty_content"]));
     }
 
+    //파일 첨부
+    //$_Files[]
+    if(isset($_FILES['files']) && $_FILES['files']['name'] != '') {
+        $tmparr = explode('.', $_FILES['files']['name']);
+        $ext = end($tmparr);
+        $flag = rand(1000, 9999);
+        $filename = 'a'.date('YmdHis').$flag.'.'. $ext;
+        $file_ori = $_FILES['files']['name'];
+        // a12804128138.jpg|새파일.jpg
+
+        copy($_FILES['files']['tmp_name'], BOARD_DIR . "/" . $filename); 
+        
+        $full_str = $filename . '|' . $file_ori;
+    }
+
     $memArr = $member->getInfo($ses_id);
     $name = $memArr['name'];
 
@@ -67,6 +82,7 @@ if($mode == 'input') {
         'name' => $name,
         'subject' => $subject,
         'content' => $content,
+        'files' => $full_str,
         'ip' => $_SERVER['REMOTE_ADDR']
     ];
 
