@@ -1,0 +1,5 @@
+ALTER TABLE board ADD COLUMN files VARCHAR(255) DEFAULT '' AFTER content;
+
+DESC board;
+
+SELECT * FROM board;
