@@ -1,4 +1,13 @@
 <?php
+//$err_array = error_get_last();
+
+//$SERVER['CONTENT_LENGTH']
+
+if(isset($SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > (int) ini_get('post_max_size') * 1024 * 1024) {
+    $arr = ['result' => 'post_max_size'];
+    die(json_encode($arr));
+}
+
 include '../inc/common.php';
 include '../inc/dbconfig.php';
 include '../inc/board.php';
@@ -58,19 +67,68 @@ if($mode == 'input') {
         die(json_encode(["result" => "empty_content"]));
     }
 
+    /*
+    Array
+    (
+        [files] => Array
+            (
+                [name] => Array
+                    (
+                        [0] => 1.jpg
+                        [1] => 2.jpg
+                    )
+    
+                [type] => Array
+                    (
+                        [0] => image/jpeg
+                        [1] => image/jpeg
+                    )
+                [tmp_name] => Array
+                    (
+                        [0] => C:\xampp\tmp\php2531.tmp
+                        [1] => C:\xampp\tmp\php2532.tmp
+                    )
+            )
+    )
+    */
+
     //파일 첨부
     //$_Files[]
-    if(isset($_FILES['files']) && $_FILES['files']['name'] != '') {
-        $tmparr = explode('.', $_FILES['files']['name']);
-        $ext = end($tmparr);
-        $flag = rand(1000, 9999);
-        $filename = 'a'.date('YmdHis').$flag.'.'. $ext;
-        $file_ori = $_FILES['files']['name'];
-        // a12804128138.jpg|새파일.jpg
+    $file_list_str = '';
+    if(isset($_FILES['files'])) {
 
-        copy($_FILES['files']['tmp_name'], BOARD_DIR . "/" . $filename); 
-        
-        $full_str = $filename . '|' . $file_ori;
+        if(sizeof($_FILES['files']['name']) > 3){
+            $arr = ["result" => "file_upload_count_exceed"];
+            die(json_encode(($arr)));
+        }
+
+        $tmp_arr = [];
+        foreach($_FILES['files']['name'] AS $key => $val){
+            //$_FILES['files']['name'][$key]
+            $full_str = '';
+
+            $tmparr = explode('.', $_FILES['files']['name'][$key]);
+            $ext = end($tmparr);
+
+            $not_allowed_file_ext = ['txt', 'exe', 'xls'];
+
+            if(in_array($ext, $not_allowed_file_ext)) {
+                $arr = ['result' => 'not_allowed_file'];
+                die(json_encode($arr));
+            }
+
+            $flag = rand(1000, 9999);
+            $filename = 'a'. date('YmdHis') . $flag . '.' . $ext;
+            $file_ori = $_FILES['files']['name'][$key];
+            // a12804128138.jpg|새파일.jpg
+
+            copy($_FILES['files']['tmp_name'][$key], BOARD_DIR . '/' . $filename);
+            
+            $full_str = $filename . '|' . $file_ori;
+            $tmp_arr[] = $full_str;
+        }
+
+        $file_list_str = implode('?', $tmp_arr);
     }
 
     $memArr = $member->getInfo($ses_id);
@@ -82,7 +140,7 @@ if($mode == 'input') {
         'name' => $name,
         'subject' => $subject,
         'content' => $content,
-        'files' => $full_str,
+        'files' => $file_list_str,
         'ip' => $_SERVER['REMOTE_ADDR']
     ];
 

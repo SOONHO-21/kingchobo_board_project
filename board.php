@@ -3,8 +3,12 @@
 include 'inc/common.php';
 include 'inc/dbconfig.php';
 include 'inc/board.php';
+include 'inc/lib.php'; // 페이지네이션
 
 $bcode = (isset($_GET['bcode']) && $_GET['bcode'] != '') ? $_GET['bcode'] : '';
+$page  = (isset($_GET['page' ]) && $_GET['page' ] != '' && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+$sn = (isset($_GET['sn']) && $_GET['sn'] != '') ? $_GET['sn'] : '';
+$sf = (isset($_GET['sf']) && $_GET['sf'] != '') ? $_GET['sf'] : '';
 
 if($bcode == '') {
     die('<script>alert("게시판 코드가 빠짐");history.go(-1)</script>');
@@ -16,17 +20,41 @@ $boardm = new BoardManage($db);
 $boardArr = $boardm->list();
 $board_name = $boardm->getBoardName($bcode);
 
+
+
+
 $board = new Board($db);
 $menu_code = 'board';
 $js_array = ['js/board.js'];
 $g_title = $board_name;
 
+$paramArr = ['sn' => $sn, 'sf' => $sf];
+
+$total = $board->total($bcode, $paramArr);
+
+$limit = 10;
+$page_limit = 5;
+$boardRs = $board->list($bcode, $page, $limit, $paramArr);
+
+
 include_once 'inc_header.php';
 
 ?>
+<style>
+    .tr{cursor: pointer;}
+</style>
 <main class="w-50 mx-auto border rounded-5 p-5">
-    <h1 class="f_center"><?= $board_name ?></h1>
+    <h1 class="text-center"><?= $board_name; ?></h1>
 
+    <table class="table striped table-hover mt-5">
+        <colgroup>
+            <col width=10%>
+            <col width=45%>
+            <col width=10%>
+            <col width=15%>
+            <col width=10%>
+        </colgroup>
+    </table>
     <table class="table striped mt-5">
         <tr>
             <th>번호</th>
@@ -35,32 +63,47 @@ include_once 'inc_header.php';
             <th>날짜</th>
             <th>조회 수</th>
         </tr>
-        <tr>
-            <th>1</th>
-            <th>행복한 하루</th>
-            <th>홍길동</th>
-            <th>0321</th>
-            <th>15</th>
+<?php
+    $cnt = 0;
+    $ntotal = $total - ($page - 1) * $limit;
+    foreach($boardRs AS $boardRow){
+        $number = $ntotal - $cnt;
+        $cnt++;
+?>
+        <tr class="tr" data-idx="<?=$boardRow['idx']?>">
+            <td><?= $number; ?></td>
+            <td><?= $boardRow['subject']; ?></td>
+            <td><?= $boardRow['name']; ?></td>
+            <td><?= $boardRow['create_at']; ?></td>
+            <td><?= $boardRow['hit']; ?></td>
         </tr>
-        <tr>
-            <th>1</th>
-            <th>행복한 하루</th>
-            <th>홍길동</th>
-            <th>0321</th>
-            <th>15</th>
-        </tr>
+<?php
+    }
+?>
     </table>
+    
+    <div class="container mt-3 w-50 d-flex gap-2">
+        <select name="" id="sn" class="form-select w-25">
+            <option value="1"<?php if($sn == 1) echo ' selected;'; ?>>제목+내용</option>
+            <option value="2"<?php if($sn == 2) echo ' selected;'; ?>>제목</option>
+            <option value="3"<?php if($sn == 3) echo ' selected;'; ?>>내용</option>
+            <option value="4"<?php if($sn == 4) echo ' selected;'; ?>>글쓴이</option>
+        </select>
+        <input type="text" class="form-control w-25" id="sf" value="<?= $sf ?>">
+        <button class="btn btn-primary w-25" id="btn_search">검색</button>
+        <button class="btn btn-info w-25" id="btn_all">전체목록</button>
+    </div>
 
     <div class="d-flex justify-content-between align-items-start">
-        <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-        </nav>
+
+<?php
+    $param = '&bcode=' . $bcode;
+    if(isset($sn) && $sn != '' && isset($sf) && $sf != '') {
+      $param .= '&sn='. $sn. '&sf='. $sf;
+    }
+
+    echo my_pagination($total, $limit, $page_limit, $page, $param);
+?>
         <button class="btn btn-primary" id="btn_write">글쓰기</button>
     </div>
 
