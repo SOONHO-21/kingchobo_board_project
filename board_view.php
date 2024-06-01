@@ -30,6 +30,10 @@ $g_title = $board_name;
 $boardRow = $board->hitInc($idx);
 $boardRow = $board->view($idx);
 
+//다운로드 횟수 -> 저장
+$downhit_arr = explode('?', $boardRow['downhit']);
+
+
 include_once 'inc_header.php';
 
 ?>
@@ -49,14 +53,16 @@ include_once 'inc_header.php';
             <?= $boardRow['content']; ?>
 
             <?php
+            //첨부파일 출력
                 if($boardRow['files'] != '') {
                     $filelist = explode('?', $boardRow['files']);
 
                     $th = 0;
                     foreach($filelist AS $file) {
+
                         list($file_source, $file_name) = explode('|', $file);
 
-                        echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_source</a><br>";
+                        echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_source</a> (down: ".$downhit_arr[$th].")<br>";
                         $th++;
                     }
                 }

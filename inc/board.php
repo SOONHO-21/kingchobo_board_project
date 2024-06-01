@@ -137,9 +137,30 @@ class Board {
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $row = $stmt->fetch();
 
-        $filelist = explode('?', $row['files']);
+        $filelist = explode('?', $row['files']);    //aaa.jpg|이름?.. | ..
 
-        return $filelist[$th];
+        return $filelist[$th] . '|' . count($filelist);
     }
+
+    //다운로드 회수 구하기
+    public function getDownhit($idx){
+        $sql = "SELECT downhit FROM board WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $params = [":idx" => $idx];
+        $stmt->execute($params);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch();
+
+        return $row['downhit'];
+    }
+
+    //다운로드 횟수 증가시키기
+    public function increaseDownhit($idx, $downhit) {
+        $sql = "UPDATE board SET downhit=:downhit WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $params = [":downhit" => $downhit, ":idx" => $idx];
+        $stmt->execute($params);
+    }
+    
 }
 ?>

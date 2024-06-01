@@ -1,4 +1,11 @@
 <?php
+include '../inc/common.php';
+if($ses_id == '') {
+    die('<script>alert("로그인 한 회원만 다운로드 가능합니다.");
+    self.location.href="../login.php"
+    </script>');
+}
+
 $idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : '';
 $th = (isset($_GET['th']) && $_GET['th'] != '' && is_numeric($_GET['th'])) ? $_GET['th'] : '';
 
@@ -16,7 +23,30 @@ include '../inc/board.php';
 $board = new Board($db);
 
 $fileinfo = $board->getAttachFile($idx, $th);
-list($file_source, $file_name) = explode('|', $fileinfo);
+list($file_source, $file_name, $totalfile) = explode('|', $fileinfo);
+
+
+// 다운로드 수 구하기
+$downhit = $board->getDownhit($idx);
+
+if($downhit == '') {
+    $tmp_arr = [];
+    for($i=0; $i<$totalfile; $i++) {
+        if($th == $i) {
+            $tmp_arr[] = 1;
+        } else {
+            $tmp_arr[] = 0;
+        }
+    }
+} else {
+    //$downhit = '470'
+    $tmp_arr = explode('?', $downhit);
+    $tmp_arr[$th] = $tmp_arr[$th] + 1;
+}
+
+$downhit_str = implode('?', $tmp_arr);
+
+$board->increaseDownhit($idx, $downhit_str);
 
 if($file_source == '' || $file_name == '') {
     die('<script>alert("정보를 제대로 가져오지 못했습니다.")</script>');
