@@ -46,7 +46,18 @@ if($downhit == '') {
 
 $downhit_str = implode('?', $tmp_arr);
 
-$board->increaseDownhit($idx, $downhit_str);
+$str = $idx . '?' . $th;
+if(isset($_SESSION['lastdownhit']) && $_SESSION['lastdownhit'] != '') {
+    
+    if($str != $_SESSION['lastdownhit']) {
+        $board->increaseDownhit($idx, $downhit_str);
+        $_SESSION['lastdownhit'] = $str;
+    }
+} else {
+    $board->increaseDownhit($idx, $downhit_str);
+    $_SESSION['lastdownhit'] = $str;
+}
+
 
 if($file_source == '' || $file_name == '') {
     die('<script>alert("정보를 제대로 가져오지 못했습니다.")</script>');

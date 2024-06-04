@@ -1,5 +1,4 @@
 <?php
-
 include 'inc/common.php';
 include 'inc/dbconfig.php';
 include 'inc/board.php';
@@ -27,8 +26,14 @@ $menu_code = 'board';
 $js_array = ['js/board_view.js'];
 $g_title = $board_name;
 
-$boardRow = $board->hitInc($idx);
 $boardRow = $board->view($idx);
+
+//$_SERVER["REMOTE_ADDR"] : 지금 접속한 사람의 IP를 담고 있음
+
+if($boardRow['last_reader'] != $_SERVER["REMOTE_ADDR"]) {
+    $board->hitInc($idx);
+    $board->updateLastReader($idx, $_SERVER["REMOTE_ADDR"]);
+}
 
 //다운로드 횟수 -> 저장
 $downhit_arr = explode('?', $boardRow['downhit']);
@@ -57,6 +62,11 @@ include_once 'inc_header.php';
                 if($boardRow['files'] != '') {
                     $filelist = explode('?', $boardRow['files']);
 
+                    //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
+                    if($boardRow['downhit'] == '') {
+                        $downhit_arr = array_fill(0, count($filelist), 0);
+                    }
+
                     $th = 0;
                     foreach($filelist AS $file) {
 
@@ -69,9 +79,11 @@ include_once 'inc_header.php';
             ?>
         </div>
         <div class="d-flex gap-2 p-3">
-            <button class = "btn btn-secondary">목록</button>
-            <button class = "btn btn-primary">수정</button>
-            <button class = "btn btn-danger">삭제</button>
+            <button class = "btn btn-secondary" id="btn_list">목록</button>
+        <?php if($boardRow['id'] == $ses_id) { ?>
+            <button class = "btn btn-primary" id="btn_edit">수정</button>
+            <button class = "btn btn-danger" id="btn_delete">삭제</button>
+        <?php } ?>
         </div>
     </div>
 

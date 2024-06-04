@@ -161,6 +161,12 @@ class Board {
         $params = [":downhit" => $downhit, ":idx" => $idx];
         $stmt->execute($params);
     }
+    public function updateLastReader($idx, $str) {
+        $sql = "UPDATE board SET last_reader=:last_reader WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $params = [":last_reader" => $str, ":idx" => $idx];
+        $stmt->execute($params);
+    }
     
 }
 ?>
