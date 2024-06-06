@@ -17,6 +17,8 @@ $mode = (isset($_POST['mode']) && $_POST['mode'] != '') ? $_POST['mode'] : '';
 $bcode = (isset($_POST['bcode']) && $_POST['bcode'] != '') ? $_POST['bcode'] : '';
 $subject = (isset($_POST['subject']) && $_POST['subject'] != '') ? $_POST['subject'] : '';
 $content = (isset($_POST['content']) && $_POST['content'] != '') ? $_POST['content'] : '';
+$idx = (isset($_POST['idx']) && $_POST['idx'] != '' && is_numeric($_POST['idx'])) ? $_POST['idx'] : '';
+$th = (isset($_POST['th']) && $_POST['th'] != '' && is_numeric($_POST['th'])) ? $_POST['th'] : '';
 
 if($mode == '') {
     $arr = ["result" => "empty_mode"];
@@ -147,5 +149,61 @@ if($mode == 'input') {
     $board->input($arr);
 
     die(json_encode(["result" => "success"]));
+}
+else if($mode == 'each_file_del') {
+
+    if($idx == '') {
+        $arr = ["result" => "empty_idx"];
+        die($json_encode($arr));
+    }
+    if($th == ''){
+        $arr = ["result" => "empty_th"];
+        die($json_encode($arr));
+    }
+
+    $file = $board->getAttachFile($idx, $th);
+
+    $each_files = explode('|', $file);
+
+    //BOARD_DIR . '/' . $each_files[0]
+    if(file_exists(BOARD_DIR . '/' . $each_files[0])) {
+        unlink(BOARD_DIR . '/' . $each_files[0]);
+    }
+
+    $row = $board->view($idx);
+
+    $files = explode('?', $row['files']);
+    $tmp_arr = [];
+    foreach($files AS $key => $val) {
+
+        if($key == $th) {
+            continue;
+        }
+
+        $tmp_arr[] = $val;
+    }
+
+    $files = implode('?', $tmp_arr);    //퍄일리스트 문자열
+
+    $tmp_arr = [];
+    $downs = explode('?', $row['downhit']);
+    foreach($downs AS $key => $val) {
+
+        if($key == $th) {
+            continue;
+        }
+
+        $tmp_arr[] = $val;
+    }
+
+    $downs = implode('?', $tmp_arr);    //다운로드 수 문자열
+
+    $board->updateFileList($idx, $files, $downs);
+
+    $arr = ["result" => "success"];
+    die(json_encode(($arr)));
+
+    // $arr = ["result" => "success"];
+    // die($json_encode($arr));
 }
 ?>

@@ -57,6 +57,30 @@ include_once 'inc_header.php';
     </div>
     <div id="summernote"></div>
 
+    <div class="mt-3">
+        <?php
+        //첨부파일 출력
+            if($boardRow['files'] != '') {
+                $filelist = explode('?', $boardRow['files']);
+
+                //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
+                if($boardRow['downhit'] == '') {
+                    $downhit_arr = array_fill(0, count($filelist), 0);
+                }
+
+                $th = 0;
+                foreach($filelist AS $file) {
+
+                    list($file_source, $file_name) = explode('|', $file);
+
+                    echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_source</a>
+                    <button class='btn btn-sm btn-danger mb-2 btn_file_del' data-th='" . $th . "'>삭제</button><br>";
+                    $th++;
+                }
+            }
+        ?>
+    </div>
+
     <div>
         <input type="file" name="attach" id="id_attach" multiple class="form-control">
     </div>

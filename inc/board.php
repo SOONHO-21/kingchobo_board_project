@@ -128,6 +128,14 @@ class Board {
         $stmt->execute($params);
     }
 
+    //파일 목록 업데이트
+    public function updateFileList($idx, $files, $downs) {
+        $sql = "UPDATE board SET files=:files, downhit=:downs WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $params = [":idx" => $idx, ":files" => $files, ":downs" => $downs];
+        $stmt->execute($params);
+    }
+
     //첨부파일 구하기
     public function getAttachFile($idx, $th) {
         $sql = "SELECT * FROM board WHERE idx=:idx";

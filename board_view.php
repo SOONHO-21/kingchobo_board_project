@@ -26,7 +26,10 @@ $menu_code = 'board';
 $js_array = ['js/board_view.js'];
 $g_title = $board_name;
 
+
 $boardRow = $board->view($idx);
+
+
 
 //$_SERVER["REMOTE_ADDR"] : 지금 접속한 사람의 IP를 담고 있음
 
