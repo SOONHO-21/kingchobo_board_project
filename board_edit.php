@@ -79,12 +79,13 @@ include_once 'inc_header.php';
                 }
             }
         ?>
-    </div>
 
-    <div>
-        <input type="file" name="attach" id="id_attach" multiple class="form-control">
     </div>
-
+<?php if($th < 3) { ?>
+    <div class="mt-3">
+        <input type="file" name="attach" id="id_attach" class="form-control">
+    </div>
+<?php }?>
     <div class="mt-3 d-flex gap-2 justify-content-end">
         <button class="btn btn-primary" id="btn_write_submit">확인</button>
         <button class="btn btn-secondary" id="btn_board_list">목록</button>
