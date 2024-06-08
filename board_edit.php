@@ -58,36 +58,36 @@ include_once 'inc_header.php';
     <div id="summernote"></div>
 
     <div class="mt-3">
-        <?php
-        //첨부파일 출력
-            if($boardRow['files'] != '') {
-                $filelist = explode('?', $boardRow['files']);
+    <?php
+    //첨부파일 출력
+        $th = 0;
+        if($boardRow['files'] != '') {
+            $filelist = explode('?', $boardRow['files']);
 
-                //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
-                if($boardRow['downhit'] == '') {
-                    $downhit_arr = array_fill(0, count($filelist), 0);
-                }
-
-                $th = 0;
-                foreach($filelist AS $file) {
-
-                    list($file_source, $file_name) = explode('|', $file);
-
-                    echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_source</a>
-                    <button class='btn btn-sm btn-danger mb-2 btn_file_del' data-th='" . $th . "'>삭제</button><br>";
-                    $th++;
-                }
+            //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
+            if($boardRow['downhit'] == '') {
+                $downhit_arr = array_fill(0, count($filelist), 0);
             }
-        ?>
+
+            foreach($filelist AS $file) {
+
+                list($file_source, $file_name) = explode('|', $file);
+
+                echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_name</a> 
+                <button class='btn btn-sm btn-danger mb-2 btn_file_del py-0' data-th='".$th."'>삭제</button><br>";
+                $th++;
+            }
+        }
+    ?>
 
     </div>
-<?php if($th < 3) { ?>
-    <div class="mt-3">
-        <input type="file" name="attach" id="id_attach" class="form-control">
-    </div>
-<?php }?>
+    <?php if($th < 3) { ?>
+        <div class="mt-3">
+            <input type="file" name="attach" id="id_attach" class="form-control">
+        </div>
+    <?php }?>
     <div class="mt-3 d-flex gap-2 justify-content-end">
-        <button class="btn btn-primary" id="btn_write_submit">확인</button>
+        <button class="btn btn-primary" id="btn_edit_submit">확인</button>
         <button class="btn btn-secondary" id="btn_board_list">목록</button>
     </div>
 
