@@ -29,6 +29,9 @@ $g_title = $board_name;
 
 $boardRow = $board->view($idx);
 
+if($boardRow == null) {
+    die('<script>alert("존재하지 않는 게시물입니다.");history.go(-1);</script>');
+}
 
 
 //$_SERVER["REMOTE_ADDR"] : 지금 접속한 사람의 IP를 담고 있음
@@ -82,11 +85,16 @@ include_once 'inc_header.php';
             ?>
         </div>
         <div class="d-flex gap-2 p-3">
-            <button class = "btn btn-secondary" id="btn_list">목록</button>
+        <button class = "btn btn-secondary" id="btn_list">목록</button>
         <?php if($boardRow['id'] == $ses_id) { ?>
             <button class = "btn btn-primary" id="btn_edit">수정</button>
             <button class = "btn btn-danger" id="btn_delete">삭제</button>
         <?php } ?>
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+            <textarea name="" rows="3" class="form-control" id="comment_content"></textarea>
+            <button class="btn btn-secondary" id="btn_comment">등록</button>
         </div>
     </div>
 

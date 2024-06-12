@@ -33,9 +33,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if(btn_delete) {
         btn_delete.addEventListener("click", () => {
             if(confirm('삭제하시겠습니까?')){
-                
+
+
+
+                const f = new FormData()
+                f.append('idx', params['idx'])
+                f.append('bcode', params['bcode'])
+                f.append('mode', 'delete')
+
+                const xhr = new XMLHttpRequest()
+                xhr.open('post', 'pg/board_process.php', true)
+                xhr.send(f)
+
+                xhr.onload = () => {
+                    if(xhr.status == 200) {
+
+                        const data = JSON.parse(xhr.responseText)
+                        if(data.result == 'success') {
+                            alert('게시물이 삭제되었습니다.')
+                            self.location.href='./board.php?bcode=' + params['bcode']
+                        }
+                    } else if(xhr.status == 404) {
+                        alert('통신실패')
+                    }
+                }
             }
         })
     }
+    
 
 })

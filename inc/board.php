@@ -189,7 +189,7 @@ class Board {
     //파일 첨부
     public function file_attach($files, $file_cnt) {
 
-        if(sizeof($files['name']) > 3) {
+        if(sizeof($files['name']) > $file_cnt) {
             $arr = ["result" => "file_upload_count_exeed"];
             die(json_encode(($arr)));
         }
@@ -221,6 +221,22 @@ class Board {
         }
 
         return implode('?', $tmp_arr);
+    }
+
+    public function extract_image($content) {
+        preg_match_all("/<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/i", $content, $matches);
+        $img_array = [];
+        foreach($matches[1] AS $key => $row){
+            $img_array[] = $row;
+        }
+        return $img_array;
+    }
+
+    public function delete($idx) {
+        $sql = "DELETE FROM board WHERE idx=:idx";
+        $stmt = $this->conn->prepare($sql);
+        $params = [':idx' => $idx];
+        $stmt->execute($params);
     }
 }
 ?>
