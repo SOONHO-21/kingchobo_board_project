@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 xhr.send(f)
 
                 xhr.onload = () => {
+
                     if(xhr.status == 200) {
 
                         const data = JSON.parse(xhr.responseText)
@@ -60,6 +61,33 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
     }
-    
+    //댓글 등록 버튼 클릭 시
+    const btn_comment = document.querySelector("#btn_comment")
+    btn_comment.addEventListener("click", () => {
+        const comment_content = document.querySelector("#comment_content")
+        if(comment_content.value == '') {
+            alert('댓글 내용을 입력바랍니다.')
+            comment_content.focus()
+            return false
+        }
+        //comment_content.value
+        //작성자 아이디 : 세션
+        //글 번호 : params['idx']
+        const f1 = new FormData()
+        f1.append('pidx', params['idx'])
+        f1.append('content', comment_content.value)
+        f1.append('mode', 'input')
+
+        const xhr = new XMLHttpRequest()
+        xhr.open("post", "./pg/comment_process.php", true)
+        xhr.send(f1)
+        xhr.onload = () => {
+            if(xhr.status == 200) {
+                alert('통신성공')
+            }else if(xhr.status == 404) {
+                alert('통신실패')
+            }
+        }
+    })
 
 })
