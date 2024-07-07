@@ -6,7 +6,7 @@ class Board {
 
     //생성자
     public function __construct($db) {
-        $this->conn = $db;
+        $this->conn = $db;      //생성자에 전달된 $db 값을 현재 객체의 conn 속성에 할당
     }
 
     //글 등록
@@ -23,7 +23,7 @@ class Board {
         $stmt->bindValue(':content', $arr['content']);
         $stmt->bindValue(':files', $arr['files']);
         $stmt->bindValue(':ip', $arr['ip']);
-        $stmt->execute();
+        $stmt->execute();       //execute 메서드는 준비된 SQL 문을 실행
     }
 
     //글 수정
@@ -65,9 +65,8 @@ class Board {
 
         }
 
-        $sql = "SELECT idx, id, subject, name, hit, DATE_FORMAT(create_at, '%Y-%m-%d %H:%i') AS create_at
-        FROM board ". $where ."
-        ORDER BY idx DESC LIMIT " . $start . "," . $limit;
+        $sql = "SELECT idx, id, subject, name, hit, comment_cnt, DATE_FORMAT(create_at, '%Y-%m-%d %H:%i') AS create_at
+        FROM board ". $where ." ORDER BY idx DESC LIMIT " . $start . "," . $limit;
 
         $stmt = $this->conn->prepare($sql);
 
@@ -214,6 +213,7 @@ class Board {
             $file_ori = $files['name'][$key];
             // a12804128138.jpg|새파일.jpg
 
+            // copy() move_uploaded_file()
             copy($files['tmp_name'][$key], BOARD_DIR . '/' . $filename);
             
             $full_str = $filename . '|' . $file_ori;

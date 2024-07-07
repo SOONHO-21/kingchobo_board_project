@@ -2,10 +2,12 @@
 include 'inc/common.php';
 include 'inc/dbconfig.php';
 include 'inc/board.php';
+include 'inc/comment.php';
 include 'inc/lib.php'; // 페이지네이션
 
-$bcode = (isset($_GET['bcode']) && $_GET['bcode'] != '') ? $_GET['bcode'] : '';
-$idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : '';
+
+$bcode = (isset($_GET['bcode']) && $_GET['bcode'] != '') ? $_GET['bcode'] : '';                         //게시물 코드
+$idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : '';     //게시물 번호
 
 if($bcode == '') {
     die('<script>alert("게시판 코드가 빠졌습니다");history.go(-1)</script>');
@@ -33,6 +35,11 @@ if($boardRow == null) {
     die('<script>alert("존재하지 않는 게시물입니다.");history.go(-1);</script>');
 }
 
+//댓글 목록
+$comment = new Comment($db);
+
+$commentRs = $comment->list($idx);
+
 
 //$_SERVER["REMOTE_ADDR"] : 지금 접속한 사람의 IP를 담고 있음
 
@@ -41,7 +48,7 @@ if($boardRow['last_reader'] != $_SERVER["REMOTE_ADDR"]) {
     $board->updateLastReader($idx, $_SERVER["REMOTE_ADDR"]);
 }
 
-//다운로드 횟수 -> 저장
+//다운로드 횟수 저장 배열
 $downhit_arr = explode('?', $boardRow['downhit']);
 
 
@@ -75,7 +82,7 @@ include_once 'inc_header.php';
 
                     $th = 0;
                     foreach($filelist AS $file) {
-
+                        
                         list($file_source, $file_name) = explode('|', $file);
 
                         echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_source</a> (down: ".$downhit_arr[$th].")<br>";
@@ -94,8 +101,38 @@ include_once 'inc_header.php';
 
         <div class="d-flex gap-2 mt-3">
             <textarea name="" rows="3" class="form-control" id="comment_content"></textarea>
-            <button class="btn btn-secondary" id="btn_comment">등록</button>
+            <button class="btn btn-secondary" id="btn_comment" data-comment-idx="0">등록</button>
         </div>
+
+        <div class="mt-3">
+
+        <table class="table">
+            <colgroup>
+            <col width="50%" />
+            <col width="10%" />
+            <col width="10%" />
+            </colgroup>
+            <?php
+                foreach($commentRs AS $comRow) {
+            ?>
+            <tr>
+                <td><span><?php echo nl2br($comRow['content']); ?></span>
+
+                <?php
+                    if($comRow['id'] == $ses_id) {
+                        echo '
+                        <button class="btn btn-info p-1 btn-sm btn_comment_edit" data-comment-idx="'.$comRow['idx'].'">수정</button>
+                        <button class="btn btn-danger p-1 btn-sm ms-2 btn_comment_delete" data-comment-idx="'.$comRow['idx'].'">삭제</button>';
+                    }
+                ?></td>
+                <td><?php echo $comRow['id']; ?></td>
+                <td><?php echo $comRow['create_at']; ?></td>
+            </tr>
+            <?php } ?>
+        </table>
+
+        </div>
+
     </div>
 
 </main>
