@@ -24,7 +24,7 @@ class Comment {
         $stmt->execute($params);
 
         //댓글수 1 증가
-        $sql = "UPDATE board SET comment_cnt=comment_cnt + 1 WHERE idx=:idx";
+        $sql = "UPDATE board SET comment_cnt=comment_cnt+1 WHERE idx=:idx";
         $stmt = $this->conn->prepare($sql);
         $params = [":idx" => $arr['pidx']];
         $stmt->execute($params);
@@ -41,14 +41,14 @@ class Comment {
     }
 
     //댓글 삭제
-    public function delete($pidx, $idx) {
-        //댓글 갯수 감소
+    public function delete($pidx, $idx) {   //게시글 번호, 댓글 번호
+        //게시판(board) DB에서 댓글 갯수 감소
         $sql = "UPDATE board SET comment_cnt=comment_cnt-1 WHERE idx=:pidx";
         $stmt = $this->conn->prepare($sql);
         $params = [":pidx" => $pidx];
         $stmt->execute($params);
 
-        //DB에서 댓글 삭제
+        //댓글(comment)DB에서 댓글 삭제
         $sql = "DELETE FROM comment WHERE idx=:idx";
         $stmt = $this->conn->prepare($sql);
         $params = [":idx" => $idx];

@@ -6,8 +6,8 @@ include 'inc/comment.php';
 include 'inc/lib.php'; // 페이지네이션
 
 
-$bcode = (isset($_GET['bcode']) && $_GET['bcode'] != '') ? $_GET['bcode'] : '';                         //게시물 코드
-$idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : '';     //게시물 번호
+$bcode = (isset($_GET['bcode']) && $_GET['bcode'] != '') ? $_GET['bcode'] : '';         //게시물 코드
+$idx = (isset($_GET['idx']) && $_GET['idx'] != '' && is_numeric($_GET['idx'])) ? $_GET['idx'] : ''; //게시물 번호
 
 if($bcode == '') {
     die('<script>alert("게시판 코드가 빠졌습니다");history.go(-1)</script>');
@@ -72,8 +72,8 @@ include_once 'inc_header.php';
 
             <?php
             //첨부파일 출력
-                if($boardRow['files'] != '') {
-                    $filelist = explode('?', $boardRow['files']);
+                if($boardRow['files'] != '') {      //첨부파일이 있으면
+                    $filelist = explode('?', $boardRow['files']);   //파일 목록 정보 가져오기
 
                     //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
                     if($boardRow['downhit'] == '') {
@@ -104,6 +104,7 @@ include_once 'inc_header.php';
             <button class="btn btn-secondary" id="btn_comment" data-comment-idx="0">등록</button>
         </div>
 
+        <!--댓글 등록 부분-->
         <div class="mt-3">
 
         <table class="table">
@@ -113,10 +114,11 @@ include_once 'inc_header.php';
             <col width="10%" />
             </colgroup>
             <?php
-                foreach($commentRs AS $comRow) {
+                foreach($commentRs AS $comRow) {    //$commentRs : 댓글 목록 배열 $comRow : 각 댓글
             ?>
             <tr>
-                <td><span><?php echo nl2br($comRow['content']); ?></span>
+                <td>
+                <span><?php echo nl2br($comRow['content']); ?></span>   <!--댓글 내용의치환된 문자열 반환 \n 처리-->
 
                 <?php
                     if($comRow['id'] == $ses_id) {
@@ -124,7 +126,8 @@ include_once 'inc_header.php';
                         <button class="btn btn-info p-1 btn-sm btn_comment_edit" data-comment-idx="'.$comRow['idx'].'">수정</button>
                         <button class="btn btn-danger p-1 btn-sm ms-2 btn_comment_delete" data-comment-idx="'.$comRow['idx'].'">삭제</button>';
                     }
-                ?></td>
+                ?>
+                </td>
                 <td><?php echo $comRow['id']; ?></td>
                 <td><?php echo $comRow['create_at']; ?></td>
             </tr>

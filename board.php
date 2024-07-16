@@ -24,17 +24,17 @@ $board_name = $boardm->getBoardName($bcode);
 
 
 $board = new Board($db);
+
 $menu_code = 'board';
 $js_array = ['js/board.js'];
 $g_title = $board_name;
 
 $paramArr = ['sn' => $sn, 'sf' => $sf];
-
 $total = $board->total($bcode, $paramArr);
 
-$limit = 10;
+$limit = 5;
 $page_limit = 5;
-$boardRs = $board->list($bcode, $page, $limit, $paramArr);
+$boardRs = $board->list($bcode, $page, $limit, $paramArr);  //글 목록 가져오기
 
 
 include_once 'inc_header.php';
@@ -65,17 +65,17 @@ include_once 'inc_header.php';
         </tr>
 <?php
     $cnt = 0;
-    $ntotal = $total - ($page - 1) * $limit;
+    $ntotal = $total - ($page - 1) * $limit;    //한 페이지에 나타나는 글 개수
     foreach($boardRs AS $boardRow){
-        $number = $ntotal - $cnt;
+        $number = $ntotal - $cnt;   //예를 들어 글이 15개가 있다고 치면 15번 글 부터 맨 위에 내림차순으로 나타난다. $number가 내림차순인 것
         $cnt++;
 ?>
         <tr class="tr" data-idx="<?=$boardRow['idx']?>">
             <td><?= $number; ?></td>
             <td>
                 <?php echo $boardRow['subject'];
-                    if($boardRow['comment_cnt'] > 0) {
-                        echo '<span class="badge bg-secondary">'.$boardRow['comment_cnt'].'</span>';
+                    if($boardRow['comment_cnt'] > 0) {  //댓글이 있으면
+                        echo '<span class="badge bg-secondary">'.$boardRow['comment_cnt'].'</span>';    //댓글 개수 표시
                     }
                 ?>
             </td>
@@ -89,8 +89,8 @@ include_once 'inc_header.php';
     </table>
     
     <div class="container mt-3 w-50 d-flex gap-2">
-        <select name="" id="sn" class="form-select w-25">
-            <option value="1"<?php if($sn == 1) echo ' selected;'; ?>>제목+내용</option>
+        <select name="" id="sn" class="form-select w-25">   <!--정렬 기준-->
+            <option value="1"<?php if($sn == 1) echo ' selected;'; ?>>제목+내용</option>    <!-- $sn : 정렬 기준 코드 -->
             <option value="2"<?php if($sn == 2) echo ' selected;'; ?>>제목</option>
             <option value="3"<?php if($sn == 3) echo ' selected;'; ?>>내용</option>
             <option value="4"<?php if($sn == 4) echo ' selected;'; ?>>글쓴이</option>
@@ -103,12 +103,12 @@ include_once 'inc_header.php';
     <div class="d-flex justify-content-between align-items-start">
 
 <?php
-    $param = '&bcode=' . $bcode;
+    $param = '&bcode=' . $bcode;    //게시판 코드를 파라미터로 설정
     if(isset($sn) && $sn != '' && isset($sf) && $sf != '') {
-      $param .= '&sn='. $sn. '&sf='. $sf;
+      $param .= '&sn='. $sn. '&sf='. $sf;       //파라미터 추가 sn, sf
     }
 
-    echo my_pagination($total, $limit, $page_limit, $page, $param);
+    echo my_pagination($total, $limit, $page_limit, $page, $param);     //페이징 처리
 ?>
         <button class="btn btn-primary" id="btn_write">글쓰기</button>
     </div>

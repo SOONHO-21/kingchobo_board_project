@@ -35,7 +35,7 @@ if($mode == 'id_chk'){
     }
 
     //이메일 형식 체크
-    if($mem->email_format_check($email) === false) {
+    if($mem->email_format_check($email) === false) {    // ../inc/member.php에 있음
         die(json_encode(['result' => 'email_format_wrong']));
     }
 

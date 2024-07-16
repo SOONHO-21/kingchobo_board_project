@@ -19,7 +19,7 @@ if($mode == ''){
     die(json_encode($arr));
 }
 
-$comment = new Comment($db);
+$comment = new Comment($db);    //댓글(comment) 객체 생성
 
 //댓글 소유권 확인 (인가자만 수정 삭제가 가능하게 처리)
 if($mode == 'edit' || $mode == 'delete') {
@@ -28,7 +28,7 @@ if($mode == 'edit' || $mode == 'delete') {
         die(json_encode($arr));
     }
 
-    $commentRow = $comment->getinfo(($idx));
+    $commentRow = $comment->getinfo(($idx));    //$idx기반 뎃글을 단 정보 가져오기
 
     if($commentRow['id'] != $ses_id) {
         $arr = ["result" => "access denied"];
@@ -47,9 +47,9 @@ if($mode == 'input') {
         die(json_encode($arr));
     }
 
-    $arr = [ "pidx" => $pidx, "content" => $content, "id" => $ses_id ];
+    $arr = [ "pidx" => $pidx, "content" => $content, "id" => $ses_id ];     //게시글 번호, 댓글 내용, 댓글 작성자 세션 아이디
 
-    $comment->input($arr);
+    $comment->input($arr);      // ../inc/comment.php의 input함수
 
     $arr = ["result" => "success"];
     die(json_encode($arr));
@@ -62,7 +62,8 @@ else if($mode == 'edit') {
 
     $arr = [ "idx" => $idx, "content" => $content, "id" => $ses_id ];
 
-    $comment->update($arr);
+    $comment->update($arr);     // ../inc/comment.php의 update함수
+
 
     $arr = ["result" => "success"];
     die(json_encode($arr));
@@ -73,7 +74,7 @@ else if($mode == 'delete') {
         die(json_encode($arr));
     }
     
-    $comment->delete($pidx, $idx);
+    $comment->delete($pidx, $idx);  // ../inc/comment.php의 update함수
 
     $arr = ["result" => "success"];
     die(json_encode($arr));

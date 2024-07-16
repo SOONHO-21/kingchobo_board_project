@@ -16,14 +16,14 @@ if($idx == '') {
 
 //게시판 목록
 include 'inc/boardmanage.php';
-$boardm = new BoardManage($db);
+$boardm = new BoardManage($db);     //BoardManage 객체 생성
 $boardArr = $boardm->list();
-$board_name = $boardm->getBoardName($bcode);
+$board_name = $boardm->getBoardName($bcode);    //게시판 코드 기반 게시판 이름 얻기
 
 
 //게시판
 $board = new Board($db);
-$boardRow = $board->view($idx);
+$boardRow = $board->view($idx);     //게시판 글 보기
 
 if($boardRow['id'] != $ses_id) {
 ?>
@@ -35,10 +35,10 @@ if($boardRow['id'] != $ses_id) {
     exit;
 }
 
-$boardRow['content'] = str_replace('`', '\`', $boardRow['content']);
+$boardRow['content'] = str_replace('`', '\`', $boardRow['content']);    //글 내용에서 \(역슬래시), '`'문자 처리
 
 
-$js_array = ['js/board_edit.js'];
+$js_array = ['js/board_edit.js'];   //글 수정 js코드 본 PHP 코드에 포함시키기
 
 $g_title = '게시판';
 
@@ -52,7 +52,7 @@ include_once 'inc_header.php';
 <main class="w-75 mx-auto border rounded-5 p-5">
     <h1 class="text-center">게시판 글수정</h1>
     
-    <div class="mb-3">
+    <div class="mb-3">  <!--제목 입력-->
         <input type="text" name="subject" id="id_subject" value="<?= $boardRow['subject']; ?>" class="form-control" placeholder="제목을 입력하세요" autocomplete="off">
     </div>
     <div id="summernote"></div>
@@ -62,19 +62,19 @@ include_once 'inc_header.php';
     //첨부파일 출력
         $th = 0;
         if($boardRow['files'] != '') {
-            $filelist = explode('?', $boardRow['files']);
+            $filelist = explode('?', $boardRow['files']);   //파일 명 목록
 
             //[배열명] = array_fill([시작번호], [채울 항목 수], [값]]);
-            if($boardRow['downhit'] == '') {
-                $downhit_arr = array_fill(0, count($filelist), 0);
+            if($boardRow['downhit'] == '') {    //파일 다운로드 수가 없으면
+                $downhit_arr = array_fill(0, count($filelist), 0);  //파일들의 다운로드 수 0으로 초기화
             }
 
             foreach($filelist AS $file) {
 
-                list($file_source, $file_name) = explode('|', $file);
+                list($file_source, $file_name) = explode('|', $file);   //파일 경로, 이름 분리해서 각각에 담기
 
-                echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_name</a> 
-                <button class='btn btn-sm btn-danger mb-2 btn_file_del py-0' data-th='".$th."'>삭제</button><br>";
+                echo "<a href=\"./pg/boarddownload.php?idx=$idx&th=$th\">$file_name</a>     //파일 다운로드 링크
+                <button class='btn btn-sm btn-danger mb-2 btn_file_del py-0' data-th='".$th."'>삭제</button><br>";  //파일 삭제 버튼
                 $th++;
             }
         }

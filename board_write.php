@@ -17,7 +17,7 @@ $boardArr = $boardm->list();
 $board_name = $boardm->getBoardName($bcode);
 
 
-$board = new Board($db);
+$board = new Board($db);    //게시판 객체
 
 
 $js_array = ['js/board_write.js'];
@@ -37,10 +37,11 @@ include_once 'inc_header.php';
     <div class="mb-3">
         <input type="text" name="subject" id="id_subject" class="form-control" placeholder="제목을 입력하세요" autocomplete="off">
     </div>
-    <div id="summernote"></div>
+
+    <div id="summernote"></div>     <!--내용 입력(밑에 썸머노트 JS 코드)-->
 
     <div>
-        <input type="file" name="attach" id="id_attach" multiple class="form-control">
+        <input type="file" name="attach" id="id_attach" multiple class="form-control">      <!--파일 목록-->
     </div>
 
     <div class="mt-3 d-flex gap-2 justify-content-end">

@@ -1,5 +1,6 @@
 <?php
 include '../inc/common.php';
+
 if($ses_id == '') {
     die('<script>alert("로그인 한 회원만 다운로드 가능합니다.");
     self.location.href="../login.php"
@@ -22,18 +23,18 @@ include '../inc/board.php';
 
 $board = new Board($db);
 
-$fileinfo = $board->getAttachFile($idx, $th);
-list($file_source, $file_name, $totalfile) = explode('|', $fileinfo);
+$fileinfo = $board->getAttachFile($idx, $th);   //첨부된 파일중 $th번째 파일 정보 가져오기
+list($file_source, $file_name, $totalfile) = explode('|', $fileinfo);   //파일 정보를 '|'기준으로 나눠서 각 변수에 담기
 
 
-// 다운로드 수 구하기
+// 게시글에 첨부된 파일들의 다운로드 수 업데이트. 다운로드를 눌렀을 때 실행 됨
 $downhit = $board->getDownhit($idx);
 
-if($downhit == '') {
+if($downhit == '') {    //파일 다운로드를 한 적이 없는 게시글이면
     $tmp_arr = [];
-    for($i=0; $i<$totalfile; $i++) {
+    for($i=0; $i<$totalfile; $i++) {    //전체 파일들 개수대로 반복
         if($th == $i) {
-            $tmp_arr[] = 1;
+            $tmp_arr[] = 1;     //처음 다운로드면 1로 설정
         } else {
             $tmp_arr[] = 0;
         }
@@ -41,17 +42,17 @@ if($downhit == '') {
 } else {
     //$downhit = '470'
     $tmp_arr = explode('?', $downhit);
-    $tmp_arr[$th] = $tmp_arr[$th] + 1;
+    $tmp_arr[$th] = $tmp_arr[$th] + 1;  //각 개별 파일마다 다운로드 횟수 1씩 증가
 }
 
-$downhit_str = implode('?', $tmp_arr);
+$downhit_str = implode('?', $tmp_arr);  //배열을 하나의 문자열로 만든다.
 
-$str = $idx . '?' . $th;
+$str = $idx . '?' . $th;    //게시글 번호?다운로드수
 if(isset($_SESSION['lastdownhit']) && $_SESSION['lastdownhit'] != '') {
     
-    if($str != $_SESSION['lastdownhit']) {
-        $board->increaseDownhit($idx, $downhit_str);
-        $_SESSION['lastdownhit'] = $str;
+    if($str != $_SESSION['lastdownhit']) {  //다운로드수가 일치하지 않으면
+        $board->increaseDownhit($idx, $downhit_str);    //다운로드수 증가시킨거 반영하기
+        $_SESSION['lastdownhit'] = $str;    //
     }
 } else {
     $board->increaseDownhit($idx, $downhit_str);
@@ -69,7 +70,7 @@ if(!file_exists($down)) {
     die('<script>alert("존재하지 않는 파일입니다.")</script>');
 }
 
-$filesize = filesize($down);
+$filesize = filesize($down);    //파일 용량
 
 header("Content-Type:application/octet-stream");
 header("Content-Disposition:attachment;filename=$file_name");
