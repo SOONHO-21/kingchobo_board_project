@@ -12,7 +12,7 @@ include 'inc_header.php';
     <img src="images/logo.svg" alt="">
     <div>
         <h1>회원가입을 축하합니다.</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non consequatur 
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non consequatur
         iusto ad, ullam debitis sint dolorem dicta velit fugiat asperiores libero
         illo corrupti inventore impedit sed unde est laboriosam nam.</p>
         <button class="btn btn-primary" id="btn_login">로그인 하기</button>

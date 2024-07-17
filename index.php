@@ -7,7 +7,7 @@ $menu_code = 'home';
 include 'inc/common.php';
 include 'inc/dbconfig.php';
 
-//게시판 목록
+//게시판 목록. 홈에서는 어차피 상단에 게시판들만 띄우고 글은 안 보니까.
 include 'inc/boardmanage.php';
 $boardm = new BoardManage($db);
 $boardArr = $boardm->list();

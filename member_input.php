@@ -1,5 +1,5 @@
 <?php
-if(!isset($_POST['chk']) or $_POST['chk'] != 1) {
+if(!isset($_POST['chk']) or $_POST['chk'] != 1) {   //stipulation.php의 hidden input chk 부분. 체크 다 했는지 확인
     // die("<script>
     //     alert('약관 등을 동의하시고 접근하시기 바랍니다');
     //     self.location.href='./stipulation.php';
@@ -18,7 +18,7 @@ include 'inc_header.php';
 <main class="w-50 mx-auto border rounded-5 p-5">
     <h1 class="f_center">회원가입</h1>
     <form name="input_form" method="post" enctype="multipart/form-data" autocomplete="off" action="pg/member_process.php">
-        <input type="hidden" name="mode" value="input">
+        <input type="hidden" name="mode" value="input">     <!--인풋 모드-->
         <input type="hidden" name="id_chk" value="0">
         <input type="hidden" name="email_chk" value="0">
     <div class= "d-flex gap-2 align-items-end">

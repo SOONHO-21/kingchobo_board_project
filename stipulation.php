@@ -39,8 +39,10 @@ include 'inc_header.php';
         <button class="btn btn-secondary w-50">가입취소</button>
     </div>
 
-    <form method="post" name="stipulation_form" action="member_input.php">
+    <form method="post" name="stipluation_form" action="member_input.php">
       <input type="hidden" name="chk" value="0">
     </form>
+
   </main>
+
 <?php include 'inc_footer.php'; ?>

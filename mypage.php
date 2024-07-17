@@ -1,7 +1,7 @@
 <?php
 include 'inc/common.php';
 
-$ses_id = (isset($_SESSION['ses_id']) && $_SESSION['ses_id'] != '') ? $_SESSION['ses_id'] : '';
+$ses_id = (isset($_SESSION['ses_id']) && $_SESSION['ses_id'] != '') ? $_SESSION['ses_id'] : ''; //로그인 여부 체크
 
 if($ses_id == '') {
 
@@ -34,12 +34,12 @@ include 'inc_header.php';
     <form name="input_form" method="post" enctype="multipart/form-data" autocomplete="off" action="pg/member_process.php">
         <input type="hidden" name="mode" value="edit">
         <input type="hidden" name="email_chk" value="0">
-        <input type="hidden" name="old_email" value="<?=$memArr['email']?>">
-        <input type="hidden" name="old_photo" value="<?=$memArr['photo']?>">
+        <input type="hidden" name="old_email" value="<?=$memArr['email']?>">    <!--기존 이메일 표시-->
+        <input type="hidden" name="old_photo" value="<?=$memArr['photo']?>">    <!--기존 사진 표시-->
     <div class= "mt-3 d-flex gap-2 align-items-end">
         <div>
         <label for="f_id" class="form-label">아이디</label>
-        <input type="text" name="id" readonly class="form-control" id="f_id" value="<?= $memArr['id'];?>">
+        <input type="text" name="id" readonly class="form-control" id="f_id" value="<?= $memArr['id'];?>">  <!--기존 아이디 표시-->
         </div>
     </div>
 
@@ -94,9 +94,9 @@ include 'inc_header.php';
             <input type="file" name="photo" id="f_photo" class="form-control">
         </div>
         <?php
-        if($memArr['photo']) {
+        if($memArr['photo']) {      //사진이 있으면
             echo '<img src="data/profile/'.$memArr['photo'].'" id="f_preview" class="w-25" alt="profile image">';
-        } else {
+        } else {    //사진이 없으면
             echo '<img src="images/person.png" id="f_preview" class="w-25" alt="profile image">';
         }
         ?>
@@ -107,8 +107,8 @@ include 'inc_header.php';
         <button type="button" class="btn btn-secondary w-50" id="btn_cancel">수정취소</button>
     </div>
     <script>
-    document.getElementById('btn_cancel').addEventListener('click', function() {
-        window.location.href = './index.php';
+    document.getElementById('btn_cancel').addEventListener('click', function() {    //취소 버튼 누르면
+        window.location.href = './index.php';       //인덱스 페이지로 복귀
     });
     </script>
     </form>
