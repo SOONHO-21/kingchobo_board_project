@@ -23,12 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = JSON.parse(xhr.responseText)
                 if(data.result == 'success'){
                     alert('사용 가능한 아이디 입니다')
-                    document.input_form.id_chk.value = "1"
+                    document.input_form.id_chk.value = "1"      //member_input.php의 <form name="input_form"아래 id_chk 부분
                 } else if(data.result == 'fail') {
                     document.input_form.id_chk.value = "0"
                     alert('이미 사용중인 아이디입니다. 다른 아이디를 입력해 주세요.')
-                    f_id.value = ''
-                    f_id.focus()
+                    f_id.value = ''     //입력창을 비우고
+                    f_id.focus()        //커서 올림
                 } else if(data.result == 'empty_id') {
                     alert('아이디가 비어 있습니다.')
                     f_id.focus()
@@ -37,19 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-    //이메일 중복체크
+    //이메일 중복체크 및 이메일 형식 체크
     const btn_email_check = document.querySelector("#btn_email_check")
     btn_email_check.addEventListener("click", () => {
-        const f_email = document.querySelector("#f_email")
+        const f_email = document.querySelector("#f_email")  //id로 접근
         if(f_email.value == ''){
             alert('이메일을 입력해 주세요')
+            f_email.focus()
             return false
         }
 
         //AJAX
         const f1 = new FormData()
-        f1.append('email', f_email.value)
-        f1.append('mode', 'email_chk')
+        f1.append('email', f_email.value)   //입력한 이메일
+        f1.append('mode', 'email_chk')      //입력 모드와 이메일 중복 체크 여부
 
         const xhr = new XMLHttpRequest()
         xhr.open("POST", "./pg/member_process.php", "true")
@@ -60,9 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = JSON.parse(xhr.responseText)
                 if(data.result == 'success'){
                     alert('사용 가능한 메일 입니다')
-                    document.input_form.email_chk.value = "1"
+                    document.input_form.email_chk.value = "1"   //member_input.php의 <form name="input_form"아래 email_chk 부분
                 } else if(data.result == 'fail') {
-                    document.input_form.email_chk.value = "0"
+                    document.input_form.email_chk.value = "0"   //중복된 이메일
                     alert('이미 사용중인 이메일입니다. 다른 이메일을 입력해 주세요.')
                     f_email.value = ''
                     f_email.focus()
@@ -81,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //가입 버튼 클릭시
     const btn_submit = document.querySelector("#btn_submit");
     btn_submit.addEventListener("click", () => {
-        const f = document.input_form
+        const f = document.input_form       //member_input.php의 <form name="input_form" 부분
         if(f.id.value == ''){
             alert('아이디를 입력해주세요')
             f.id.focus()
@@ -138,12 +139,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('우편번호를 입력해주세요')
             return false
         }
-
         //주소 입력 확인
         if(f.f_addr1.value == ''){
             alert('주소를 입력해주세요')
             return false
         }
+        //상세 주소 입력 확인
         if(f.f_addr2.value == ''){
             alert('상세 주소를 입력해주세요')
             return false
@@ -157,37 +158,37 @@ document.addEventListener("DOMContentLoaded", () => {
     btn_zipcode.addEventListener("click", () =>{
 
         new daum.Postcode({
-            oncomplete: function(data) {
+            oncomplete: function(data) {    //oncomplete: 비동기 작업이 완료되었을 때 호출되는 콜백 함수를 정의. 사용자가 주소를 선택한 후 실행
 
-                console.log(data)
+                console.log(data)   //콘솔에 데이터 출력
                 let addr = ''
                 let extra_addr = ''
-                if(data.userSelectedType == 'J'){
-                    addr = data.jibunAddress
+                if(data.userSelectedType == 'J'){   //userSelectedType : 주소 타입
+                    addr = data.jibunAddress    //지번
                 }else if(data.userSelectedType == 'R'){
-                    addr = data.roadAddress
+                    addr = data.roadAddress     //도로명
                 }
 
                 if(data.bname != ''){
-                    extra_addr = data.bname
+                    extra_addr = data.bname     //동 이름
                 }
 
-                if(data.buildingName != ''){
+                if(data.buildingName != ''){    //건물 이름이 있으면
                     if(extra_addr == ''){
-                        extra_addr = data.buildingName
-                    } else {
+                        extra_addr = data.buildingName  //extra_addr(상세주소)이 빌딩 이름
+                    } else {    //건물 이름이 없으면
                         extra_addr += ', ' + data.buildingName
                     }
                 }
-
-                if(extra_addr != ''){
-                    extra_addr = '(' + extra_addr +')'
-                }
-                 
-                const f_addr1 = document.querySelector("#f_addr1")
-                f_addr1.value = addr + extra_addr
                 
-                const f_zipcode = document.querySelector("#f_zipcode")
+                if(extra_addr != ''){   //상세 주소값이 있으면
+                    extra_addr = '(' + extra_addr +')'  //extra_addr(상세주소)를 괄호에 넣기
+                }
+
+                const f_addr1 = document.querySelector("#f_addr1")      //주소
+                f_addr1.value = addr + extra_addr       //상세 주소
+                
+                const f_zipcode = document.querySelector("#f_zipcode")  //우편 번호
                 f_zipcode.value = data.zonecode
 
                 const f_addr2 = document.querySelector("#f_addr2")

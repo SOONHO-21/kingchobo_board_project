@@ -63,8 +63,7 @@ else if($mode == 'edit') {
     $arr = [ "idx" => $idx, "content" => $content, "id" => $ses_id ];
 
     $comment->update($arr);     // ../inc/comment.php의 update함수
-
-
+    
     $arr = ["result" => "success"];
     die(json_encode($arr));
 }

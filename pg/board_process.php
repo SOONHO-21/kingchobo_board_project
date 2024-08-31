@@ -11,7 +11,7 @@ include '../inc/dbconfig.php';
 include '../inc/board.php';
 include '../inc/member.php';
 
-$mode = (isset($_POST['mode']) && $_POST['mode'] != '') ? $_POST['mode'] : '';
+$mode = (isset($_POST['mode']) && $_POST['mode'] != '') ? $_POST['mode'] : '';  //isset: 변수가 설정 되었는지 확인
 $bcode = (isset($_POST['bcode']) && $_POST['bcode'] != '') ? $_POST['bcode'] : '';
 $subject = (isset($_POST['subject']) && $_POST['subject'] != '') ? $_POST['subject'] : '';
 $content = (isset($_POST['content']) && $_POST['content'] != '') ? $_POST['content'] : '';
@@ -225,9 +225,9 @@ else if($mode == 'edit') {
 
         // data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAI
         list($type, $data) = explode(';', $row);    //';'를 기준으로 $type에는 data:image/png가, $data에는 base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAI가 저장
-        list(,$ext) = explode('/', $type);          //$ext에는 /를 기준으로 'png' 저장됨
         list(,$data) = explode(',', $data);         //$data에는 ','를 기준으로 base64로 코딩된 iVBORw0KGgoAAAANSUhEUgAAAgAAAAI
         $data = base64_decode($data);               //이미지 데이터 base64 디코딩
+        list(,$ext) = explode('/', $type);          //$ext에는 /를 기준으로 'png' 저장됨
         $ext = ($ext == 'jpeg') ? 'jpg' : $ext;     //파일 확장자 설정
 
         $filename = date('YmdHis').'_'.$key.'.'.$ext;

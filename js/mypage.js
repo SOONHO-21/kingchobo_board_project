@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+    //아이디는 수정하지 않으므로 중복체크 또한 하지 않는다.
+
 
     //이메일 중복체크 및 이메일 형식 체크
-    const btn_email_check = document.querySelector("#btn_email_check")
+    const btn_email_check = document.querySelector("#btn_email_check")      //이메일 중복체크 버튼
     btn_email_check.addEventListener("click", () => {
         const f_email = document.querySelector("#f_email")
         if(f_email.value == ''){
@@ -10,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return false
         }
 
+        //이메일 중복확인 버튼을 눌렀을 때 변경 안 했으면 알려줌
         if(document.input_form.old_email.value == f_email.value) {
             alert('이메일을 변경하지 않으셨습니다.')
             return false
@@ -48,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     //가입 버튼 클릭시
+    //아이디는 수정하지 않는다
     const btn_submit = document.querySelector("#btn_submit");
     btn_submit.addEventListener("click", () => {
         const f = document.input_form
@@ -100,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert('주소를 입력해주세요')
             return false
         }
+        //상세 주소 입력 확인
         if(f.f_addr2.value == ''){
             alert('상세 주소를 입력해주세요')
             return false

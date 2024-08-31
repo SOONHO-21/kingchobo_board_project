@@ -13,3 +13,5 @@
         echo "사용할 수 있는 id입니다.";
     }
 ?>
+
+<!--/inc/popup.php, index.php를 변경하면 최종 완성-->

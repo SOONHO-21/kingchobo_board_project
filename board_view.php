@@ -104,7 +104,7 @@ include_once 'inc_header.php';
             <button class="btn btn-secondary" id="btn_comment" data-comment-idx="0">등록</button>
         </div>
 
-        <!--댓글 등록 부분-->
+        <!--댓글 등록 및 수정, 삭제 부분-->
         <div class="mt-3">
 
         <table class="table">

@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return false
         }
 
-        const markupStr = $('#summernote').summernote('code')
-        if(markupStr == '<p><br></p>') {
+        const markupStr = $('#summernote').summernote('code')       //board_write.php 코드 <div id="summernote"></div>, <script> 태그 summernote
+        if(markupStr == '<p><br></p>') {    //내용이 빔
             alert('내용을 입력하세요.')
             return false
         }
@@ -77,12 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 return false
             }
 
-            f.append("files[]", file) // 파일
+            f.append("files[]", file)   // 파일
         }
 
         const xhr = new XMLHttpRequest()
-        xhr.open("post", "./pg/board_process.php", true)
-        xhr.send(f)
+        xhr.open("post", "./pg/board_process.php", true)    //./pg/board_process.php에서 글 쓰기 로직 수행
+        xhr.send(f)     //통신 데이터(폼 데이터) 보내기
 
         xhr.onload = () => {
             if(xhr.status == 200) {
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(data.result == 'success') {
                     alert('글 등록이 성공했습니다.')
                     self.location.href='./board.php?bcode=' + params['bcode']
-                }else if(data.result == 'file_upload_count_exeed') {
+                } else if(data.result == 'file_upload_count_exeed') {
                     alert('파일 업로드 갯수를 초과했습니다.')
                     id_attach.value = ''
                     return false
@@ -119,7 +119,5 @@ document.addEventListener("DOMContentLoaded", () => {
             id_attach.value = ''
             return false
         }
-
-        
     })
 })

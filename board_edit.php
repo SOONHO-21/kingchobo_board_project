@@ -60,7 +60,7 @@ include_once 'inc_header.php';
     <div class="mt-3">
     <?php
     //첨부파일 출력
-        $th = 0;
+        $th = 0;    //첨부파일 번호
         if($boardRow['files'] != '') {
             $filelist = explode('?', $boardRow['files']);   //파일 명 목록
 
@@ -81,7 +81,7 @@ include_once 'inc_header.php';
     ?>
 
     </div>
-    <?php if($th < 3) { ?>
+    <?php if($th < 3) { ?>  <!--파일은 최대 3개 까지-->
         <div class="mt-3">
             <input type="file" name="attach" id="id_attach" class="form-control">
         </div>
@@ -93,7 +93,7 @@ include_once 'inc_header.php';
 
 </main>
 
-<script>
+    <script>
         $('#summernote').summernote({
             placeholder: '내용을 입력해 주세요',
             tabsize: 2,
