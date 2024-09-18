@@ -12,8 +12,8 @@ $g_title = '회원가입';
 
 include 'inc_header.php';
 ?>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <main class="w-50 mx-auto border rounded-5 p-5">
     <h1 class="f_center">회원가입</h1>
@@ -24,8 +24,8 @@ include 'inc_header.php';
         
         <div class= "d-flex gap-2 align-items-end">
             <div>
-            <label for="f_id" class="form-label">아이디</label>
-            <input type="text" name="id" class="form-control" id="f_id" placeholder="아이디를 입력해주세요">
+                <label for="f_id" class="form-label">아이디</label>
+                <input type="text" name="id" class="form-control" id="f_id" placeholder="아이디를 입력해주세요">
             </div>
             <button type="button" class="btn btn-secondary" id="btn_id_check">아이디 중복확인</button>
         </div>

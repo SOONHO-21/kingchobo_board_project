@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //우편번호 찾기
     const btn_zipcode = document.querySelector("#btn_zipcode")
-    btn_zipcode.addEventListener("click", () =>{
+    btn_zipcode.addEventListener("click", () => {
 
         new daum.Postcode({
             oncomplete: function(data) {    //oncomplete: 비동기 작업이 완료되었을 때 호출되는 콜백 함수를 정의. 사용자가 주소를 선택한 후 실행
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const f_zipcode = document.querySelector("#f_zipcode")  //우편 번호
                 f_zipcode.value = data.zonecode
 
-                const f_addr2 = document.querySelector("#f_addr2")
+                const f_addr2 = document.querySelector("#f_addr2")  //상세 주소
                 f_addr2.focus()
             }
         }).open();
@@ -199,7 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const f_photo = document.querySelector("#f_photo")
     f_photo.addEventListener("change", (e) => {
-
         const reader = new FileReader()
         reader.readAsDataURL(e.target.files[0])
 

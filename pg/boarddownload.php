@@ -14,7 +14,7 @@ if($idx == '') {
     die('<script>alert("게시물 번호가 빠졌습니다.")</script>');
 }
 
-if($idx == '') {
+if($th == '') {
     die('<script>alert("몇 번째 파일인지 알 수가 없습니다.")</script>');
 }
 
